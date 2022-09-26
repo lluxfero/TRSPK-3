@@ -1,10 +1,36 @@
-﻿using System.Text;
+using System.Text;
+
+Person person = new Person("Test");
+//person.Name = "Test2"; //можно присвоить значение либо при объявлении, либо в конструкторе
+person.GetInfo();
+Console.WriteLine(person.Example());
 
 Man man = new Man();
 man.GetFromFile();
 man.WriteToFile();
 
-class Building
+class Person
+{
+    public readonly string Name = "";
+    private const int Age = 30;
+    public Person(string name)
+    {
+        Name = name;
+        //Age = 22; //нельзя изменить значение
+    }
+    public void GetInfo()
+    {
+        Console.WriteLine($"Имя: {Name}\r\nВозраст: {Age}");
+    }
+    /*public void Error() //можно присвоить значение либо при объявлении, либо в конструкторе
+    {
+        Name = "Test2";
+    }*/
+    public int Example()
+    {
+        return Age + 10;
+    }
+}
 class Man
 {
     private string Name = "";
