@@ -1,13 +1,14 @@
-using System.Text;
-
-Person person = new Person("Test");
-//person.Name = "Test2"; //можно присвоить значение либо при объявлении, либо в конструкторе
-person.GetInfo();
-Console.WriteLine(person.Example());
-
-Man man = new Man();
-man.GetFromFile();
-man.WriteToFile();
+Man man = new();
+try
+{
+    Console.WriteLine($"Данные, полученные из файла \"INPUT.txt\":\n{man.GetFromFile("INPUT.txt")}\n");
+    if (man.WriteToFile("OUTPUT.txt")) Console.WriteLine("Данные успешно записаны в файл \"OUTPUT.txt\"!\n");
+    else Console.WriteLine("Ошибка при записи данных в файл \"OUTPUT.txt\"!\n");
+}
+catch
+{
+    Console.WriteLine("Ошибка при получении данных из файла \"OUTPUT.txt\"!\n");
+}
 
 class Person
 {
@@ -16,17 +17,12 @@ class Person
     public Person(string name)
     {
         Name = name;
-        //Age = 22; //нельзя изменить значение
     }
-    public void GetInfo()
+    public string GetInfo() //внутри был Console.WriteLine()
     {
-        Console.WriteLine($"Имя: {Name}\r\nВозраст: {Age}");
+        return $"Имя: {Name}\nВозраст: {Age}";
     }
-    /*public void Error() //можно присвоить значение либо при объявлении, либо в конструкторе
-    {
-        Name = "Test2";
-    }*/
-    public int Example()
+    public static int GetExample() //имя метода - глагол
     {
         return Age + 10;
     }
@@ -35,27 +31,24 @@ class Man
 {
     private string Name = "";
     private int Age = 0;
-    public async void GetFromFile(string path = "INPUT.TXT")
+    public string GetFromFile(string path) //был сложный метод, внутри был Console.WriteLine()
     {
-        using (FileStream fstream = File.OpenRead(path))
+        using var reader = new StreamReader(path, System.Text.Encoding.Default);
+        string? line;
+        string[] words;
+        if ((line = reader.ReadLine()) != null)
         {
-            byte[] buffer = new byte[fstream.Length];
-            await fstream.ReadAsync(buffer, 0, buffer.Length);
-            string TextFromFile = Encoding.Default.GetString(buffer); //декодирование байтов в строку
-            string[] str = TextFromFile.Split();
-            Name = str[0];
-            Age = Convert.ToInt32(str[1]);
-            Console.WriteLine($"Имя: {Name}\r\nВозраст: {Age}");
+            words = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            Name = words[0];
+            Age = Convert.ToInt32(words[1]);
+            return ($"Имя: {Name}\nВозраст: {Age}");
         }
+        else throw new Exception();
     }
-    public async void WriteToFile(string path = "OUTPUT.TXT")
+    public bool WriteToFile(string path) //был сложный метод, внутри был Console.WriteLine()
     {
-        using (FileStream fstream = new FileStream(path, FileMode.OpenOrCreate))
-        {
-            string str = Name + " " + Age;
-            byte[] buffer = Encoding.Default.GetBytes(str); //преобразование строки в байты
-            await fstream.WriteAsync(buffer, 0, buffer.Length); //запись массива байтов в файл
-            Console.WriteLine("Текст записан в файл");
-        }
+        using var writer = new StreamWriter(path, false, System.Text.Encoding.Default);
+        writer.WriteLine($"Имя: {Name}\nВозраст: {Age}");
+        return true;
     }
 }
