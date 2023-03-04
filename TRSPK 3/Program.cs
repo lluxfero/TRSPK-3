@@ -45,10 +45,9 @@ class Man
         }
         else throw new Exception();
     }
-    public bool WriteToFile(string path) //был сложный метод, внутри был Console.WriteLine()
+    public void WriteToFile(string path) //был сложный метод, внутри был Console.WriteLine()
     {
         using var writer = new StreamWriter(path, false, System.Text.Encoding.Default);
         writer.WriteLine($"Имя: {Name}\nВозраст: {Age}");
-        return true;
     }
 }
