@@ -2,7 +2,8 @@ Man man = new();
 try
 {
     Console.WriteLine($"Данные, полученные из файла \"INPUT.txt\":\n{man.GetFromFile("INPUT.txt")}\n");
-    man.WriteToFile("OUTPUT.txt")) Console.WriteLine("Данные успешно записаны в файл \"OUTPUT.txt\"!\n");
+    man.WriteToFile("OUTPUT.txt");
+    Console.WriteLine("Данные успешно записаны в файл \"OUTPUT.txt\"!\n");
 }
 catch
 {
